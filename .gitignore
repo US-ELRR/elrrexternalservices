@@ -1,5 +1,8 @@
 # Compiled class file
 *.class
+#eclipse related files
+*.classpath
+*.settings
 
 # Log file
 *.log
