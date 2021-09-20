@@ -10,8 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 
-import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
-
 @SpringBootApplication
 @ComponentScan({"com.deloitte.elrr"})
 @Import({JacksonAutoConfiguration.class})
@@ -39,6 +37,7 @@ public class ElrrExternalServicesApplication implements CommandLineRunner{
 
     @Override
     public void run(String...args) throws Exception {
+    	//this method is not required
 	
     }
     
