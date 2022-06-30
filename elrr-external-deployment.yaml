@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null 
+  name: elrrexternalservices-k8s
+  labels:
+    app: elrrexternalservices-k8s
+spec:
+  selector:
+    matchLabels:
+      app: elrrexternalservices-k8s
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      creationTimestamp: null  
+      labels:
+        app: elrrexternalservices-k8s
+    spec:
+      containers:
+        - name: elrrexternalservices-dck-cont
+          image: docker.io/mohannelakurti/newrepository:elrrexternalservices-dck-img
+          env:
+            - name: "ENV"
+              value: "dev"
+          ports:
+            - containerPort: 8088
