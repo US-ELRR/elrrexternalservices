@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elrrexternalservices-k8s-svc
+spec:
+  selector:
+    app: elrrexternalservices-k8s
+    type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8088
+      targetPort: 8088
+      nodePort: 30037
