@@ -2,7 +2,7 @@ FROM openjdk:15
 
 WORKDIR /app
 
-COPY ./target/elrrexternalservices-0.0.1-SNAPSHOT.jar /app
+COPY . /app
 #COPY . .
 
 #COPY target/dependency/BOOT-INF/lib /app/lib
