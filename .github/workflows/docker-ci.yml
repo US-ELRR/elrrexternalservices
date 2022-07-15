@@ -32,7 +32,7 @@ jobs:
       run: |
        echo "Start docker build"
        #docker build . -t openlxp/elrr-external-services
-       docker build --build-arg JAR_FILE="./target/elrrexternalservices-0.0.1-SNAPSHOT.jar" --file Dockerfile -t openlxp/elrr-externalservices .
+       docker build --build-arg JAR_FILE="./target/elrrexternalservices-0.0.1-SNAPSHOT.jar" --file Dockerfile -t openlxp/elrr-external-services .
     - name: Push Image
       run: |
        echo "Push new image to the Dockerhub repository"
