@@ -23,7 +23,7 @@ jobs:
       run: |
        echo "Authenticate to Docker"
        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: Docker build
+    - name: Maven build
       run: |
        echo "maven build - Clean install"
        mvn clean install -Dmaven.test.skip=true
