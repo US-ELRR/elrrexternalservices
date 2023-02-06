@@ -14,6 +14,12 @@ jobs:
     name: Build and push Docker Image
     runs-on: ubuntu-latest
     steps:
+    - name: JDK Installation
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        check-latest: true
     - name: Checkout Code
       uses: actions/checkout@v2
     - name: Docker login
