@@ -22,10 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 /**
  * @author mnelakurti
@@ -66,6 +65,14 @@ public class ELRRStageController {
             @RequestParam(value = "lastReadDate",
             defaultValue = "2021-01-02T00:00:00Z")
             final String lastReadDate) {
+        try {
+            OffsetDateTime.parse(lastReadDate);
+        } catch (DateTimeParseException e) {
+            log.error("Invalid last read date");
+            return ResponseEntity.badRequest().build();
+        }
+
+
         StatementClient statementClient = null;
         List<ElrrStatement> listStatments = new ArrayList<>();
         try {
