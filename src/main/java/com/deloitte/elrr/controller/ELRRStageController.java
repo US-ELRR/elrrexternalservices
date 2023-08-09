@@ -4,6 +4,7 @@
 package com.deloitte.elrr.controller;
 
 import com.deloitte.elrr.dto.ElrrStatement;
+import com.deloitte.elrr.dto.TestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.adlnet.xapi.client.StatementClient;
 import gov.adlnet.xapi.model.StatementResult;
@@ -16,18 +17,13 @@ import gov.adlnet.xapi.model.ActivityDefinition;
 import gov.adlnet.xapi.model.InteractionComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author mnelakurti
@@ -86,6 +82,20 @@ public class ELRRStageController {
             log.error("Exception:" + e.getMessage(), e);
         }
         return ResponseEntity.ok(listStatments);
+
+    }
+
+    /**
+     * This for returning the localData.
+     *
+     * @return ResponseEntity
+     */
+    @PostMapping("/lrsdata")
+    public ResponseEntity<?> postData(
+            @RequestBody final TestDto personDto) {
+//        System.out.println(ObjectSizeFetcher.getObjectSize(personDto));
+
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
 
     }
 
