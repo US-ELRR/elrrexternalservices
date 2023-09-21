@@ -52,7 +52,6 @@ public class SanatizingFilter implements Filter {
 		//below we check each parameter string for any invalid values
 		httpRequest.getParameterNames().asIterator().forEachRemaining((param) -> { 
 			String paramVal = request.getParameter(param);
-			System.out.println(paramVal);
 			if(!InputSanatizer.isValidInput(paramVal)) {
 				invalidParam = true;
 				}
