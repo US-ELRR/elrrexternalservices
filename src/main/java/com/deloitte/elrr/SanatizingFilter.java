@@ -1,5 +1,6 @@
 package com.deloitte.elrr;
 
+import fr.spacefox.confusablehomoglyphs.Confusables;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,16 +9,16 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+import java.util.Iterator;
 
 
 @Component
-@Order(1)
 public class SanatizingFilter implements Filter {
 	
 
@@ -46,8 +47,7 @@ public class SanatizingFilter implements Filter {
 		if(httpResponse.isCommitted())
 			return;
 		
-		
-		
+
 		httpRequest = new WrappedHttp((HttpServletRequest) request, body.toString());
 		httpRequest.getParameterMap(); //might help to cache parameters for future filter chain
 
@@ -65,8 +65,29 @@ public class SanatizingFilter implements Filter {
 			return;
 		}
 
-		chain.doFilter(httpRequest, response);
+		if (hasHomoGlyphs(httpRequest))
+		{
+			httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request body contains homoglyphs.");
+			return;
+		}
 
+		chain.doFilter(httpRequest, response);
+	}
+
+	private static boolean hasHomoGlyphs(WrappedHttp httpRequest) {
+		Confusables confusables = Confusables.fromInternal();
+		JSONObject jsonObject = new JSONObject(httpRequest.getBody());
+		Iterator keys = jsonObject.keys();
+		while (keys.hasNext()) {
+			String key = (String) keys.next();
+			String value = (String) jsonObject.get(key);
+			boolean dangerousKey = confusables.isDangerous(key);
+			boolean dangerousValue = confusables.isDangerous(value);
+			if (dangerousKey || dangerousValue) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
