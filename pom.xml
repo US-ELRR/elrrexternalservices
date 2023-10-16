@@ -24,6 +24,7 @@
 		<sonar.dynamicAnalysis>resuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 		<sona.lauguage>java</sona.lauguage>
+		<spring-security.version>6.1.4</spring-security.version>
 	</properties>
 	<dependencies>
 		<dependency>
