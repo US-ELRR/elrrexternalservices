@@ -1,6 +1,7 @@
 package com.deloitte.elrr;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,10 +15,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class CacheConfig {
+
+	@Value("${lrs.samlid}")
+	private String samlid;
+	@Value("${lrs.samlurl}")
+	private String samlurl;
 	@Bean
 	public RelyingPartyRegistrationRepository relyingPartyRegistrations() throws Exception {
 		RelyingPartyRegistration relyingPartyRegistration = RelyingPartyRegistrations
-				.fromMetadataLocation("https://samltest.id/saml/idp").registrationId("samltest").build();
+				.fromMetadataLocation(samlurl).registrationId(samlid).build();
 
 		return new InMemoryRelyingPartyRegistrationRepository(relyingPartyRegistration);
 	}
