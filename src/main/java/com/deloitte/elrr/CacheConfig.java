@@ -42,4 +42,5 @@ public class CacheConfig {
 
 		return http.build();
 	}
+
 }
