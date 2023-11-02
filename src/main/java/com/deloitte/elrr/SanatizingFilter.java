@@ -62,13 +62,16 @@ public class SanatizingFilter implements Filter {
 			httpResponse.sendError(HttpStatus.BAD_REQUEST.value(), "Illegal Parameter Value");
 			return;
 		}
-
-		if (hasHomoGlyphs(httpRequest))
-		{
-			httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request body contains homoglyphs.");
-			return;
-		}
-
+		try{
+			if (hasHomoGlyphs(httpRequest))
+			{
+				httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request body contains homoglyphs.");
+				return;
+			}
+		}catch(Exception e){
+            	httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request body malformed");
+				return;
+        }
 		chain.doFilter(httpRequest, response);
 	}
 
