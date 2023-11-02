@@ -9,12 +9,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.adlnet.xapi.client.StatementClient;
 import gov.adlnet.xapi.model.Statement;
 import gov.adlnet.xapi.model.StatementResult;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -28,11 +33,14 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 /**
  * @author mnelakurti
  *
  */
 @WebMvcTest(ELRRStageController.class)
+@ContextConfiguration
+@WithMockUser
 class ELRRStageControllerTest {
 
 
@@ -47,7 +55,15 @@ class ELRRStageControllerTest {
 
     @Mock
     private StatementResult statementResult;
-
+    
+    private HttpHeaders headers;
+    
+    @BeforeEach
+    void addHeaders() {
+        headers = new HttpHeaders();
+        headers.set("Content-Type", " */*");
+        headers.set("X-Forwarded-Proto", "https");
+    }
 
     @Test
     void testlocalData() throws Exception {
@@ -58,7 +74,8 @@ class ELRRStageControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers);
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse servletResponse = mvcResult.getResponse();
         assertEquals(null, servletResponse.getErrorMessage());
@@ -71,7 +88,8 @@ class ELRRStageControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z")
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers);
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 .andDo(print());
         MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
@@ -88,7 +106,8 @@ class ELRRStageControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z")
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers);
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 .andDo(print());
         MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
@@ -108,7 +127,8 @@ class ELRRStageControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/lrsdatalastReadDate=202-12-10T00:00:00Z")
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers);
         mockMvc.perform(requestBuilder).andExpect(status().is4xxClientError())
                 .andDo(print());
         MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
