@@ -25,7 +25,7 @@ public class ELRRExceptionHandler extends ResponseEntityExceptionHandler {
             final Exception ex, final WebRequest request) {
         ELRRErrorDetails errorDetails = new ELRRErrorDetails(new Date(),
                 ex.getMessage(), request.getDescription(true), null);
-        log.error("Exception occurred: ", ex);
+        log.error("Exception occurred: ");
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
