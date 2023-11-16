@@ -1,5 +1,6 @@
 package com.deloitte.elrr;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.saml2.provider.service.registration.RelyingP
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class CacheConfig {
@@ -36,6 +38,7 @@ public class CacheConfig {
 						saml2.relyingPartyRegistrationRepository(relyingPartyRegistrations());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
+						log.error("Error when authorizing " + e.getMessage());
 						e.printStackTrace();
 					}
 				});
