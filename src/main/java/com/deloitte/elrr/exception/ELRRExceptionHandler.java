@@ -3,6 +3,7 @@
  */
 package com.deloitte.elrr.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @ControllerAdvice
+@Slf4j
 public class ELRRExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
@@ -23,6 +25,7 @@ public class ELRRExceptionHandler extends ResponseEntityExceptionHandler {
             final Exception ex, final WebRequest request) {
         ELRRErrorDetails errorDetails = new ELRRErrorDetails(new Date(),
                 ex.getMessage(), request.getDescription(true), null);
+        log.error("Exception occurred: ", ex);
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
@@ -32,7 +35,7 @@ public class ELRRExceptionHandler extends ResponseEntityExceptionHandler {
 
         ELRRErrorDetails errorDetails = new ELRRErrorDetails(new Date(),
                 "Not supported", ex.getMethod(), null);
-        logger.error(" Method not supported: "+ ex.getMethod());
+        log.error(" Method not supported: "+ ex.getMethod());
         return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
