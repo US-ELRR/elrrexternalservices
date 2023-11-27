@@ -9,6 +9,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Iterator;
 
-
+@Slf4j
 @Component
 public class SanatizingFilter implements Filter {
 	
@@ -39,7 +41,7 @@ public class SanatizingFilter implements Filter {
 				
 			}
 			else {
-				//need to log bad request. Might be best to continue processing and report all bad lines. / complete body
+				log.error("Illegal line in request body: " + line);
 				httpResponse.sendError(HttpStatus.BAD_REQUEST.value(), "Illegal line in request body: " + line);
 			}
 		}
@@ -59,12 +61,14 @@ public class SanatizingFilter implements Filter {
 			});
 		
 		if(invalidParam) {
+			log.error("Illegal Parameter Value");
 			httpResponse.sendError(HttpStatus.BAD_REQUEST.value(), "Illegal Parameter Value");
 			return;
 		}
 
 		if (hasHomoGlyphs(httpRequest))
 		{
+			log.error("Request body contains homoglyphs.");
 			httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Request body contains homoglyphs.");
 			return;
 		}
@@ -74,6 +78,11 @@ public class SanatizingFilter implements Filter {
 
 	private static boolean hasHomoGlyphs(WrappedHttp httpRequest) {
 		Confusables confusables = Confusables.fromInternal();
+		if(StringUtils.isBlank(httpRequest.getBody()))
+		{
+			return false;
+		}
+
 		JSONObject jsonObject = new JSONObject(httpRequest.getBody());
 		Iterator keys = jsonObject.keys();
 		while (keys.hasNext()) {
