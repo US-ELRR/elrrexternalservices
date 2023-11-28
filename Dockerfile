@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./target/elrrexternalservices-0.0.1-SNAPSHOT.jar /app
 #COPY . .
+RUN ls-al
 
 COPY ./target/dependency/BOOT-INF/lib /app/lib
 COPY ./target/dependency/META-INF /app/META-INF
