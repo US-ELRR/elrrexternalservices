@@ -23,6 +23,7 @@ jobs:
         version: 17.0.3.1
     - name: Maven build
       run: |
+       ls -al
        echo "maven build - Clean install"
        mvn clean install -Dmaven.test.skip=true
        mkdir -p target/dependency && (cd target/dependency; jar -xf ../elrrexternalservices-0.0.1-SNAPSHOT.jar)
