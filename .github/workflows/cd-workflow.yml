@@ -8,10 +8,10 @@ on:
     branches:
       - main
     types: [opened, synchronize, reopened]
-    
+
 jobs:  
   build-push:
-    # requires dependency from step above
+    # install/build maven dependencies
     name: Build and push Docker Image
     runs-on: ubuntu-latest
     steps:
