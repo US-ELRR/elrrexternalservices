@@ -30,22 +30,22 @@ public class CacheConfig {
 	@Value("${lrs.samlurl}")
 	private String samlurl;
 
-	@Bean
-	public RelyingPartyRegistrationRepository relyingPartyRegistrations() throws Exception {
+	// @Bean
+	// public RelyingPartyRegistrationRepository relyingPartyRegistrations() throws Exception {
 
-		Resource resource = new ClassPathResource("mocksaml.crt");
-		try (InputStream is = resource.getInputStream()) {
-			X509Certificate certificate = (X509Certificate) CertificateFactory.getInstance("X.509")
-					.generateCertificate(is);
-			// Saml2X509Credential.verification(certificate);
+	// 	Resource resource = new ClassPathResource("mocksaml.crt");
+	// 	try (InputStream is = resource.getInputStream()) {
+	// 		X509Certificate certificate = (X509Certificate) CertificateFactory.getInstance("X.509")
+	// 				.generateCertificate(is);
+	// 		// Saml2X509Credential.verification(certificate);
 
-			RelyingPartyRegistration relyingPartyRegistration = RelyingPartyRegistrations
-					.fromMetadataLocation(samlurl).registrationId(samlid)
-					.signingX509Credentials((signing) -> signing.add(Saml2X509Credential.verification(certificate))).build();
+	// 		RelyingPartyRegistration relyingPartyRegistration = RelyingPartyRegistrations
+	// 				.fromMetadataLocation(samlurl).registrationId(samlid)
+	// 				.signingX509Credentials((signing) -> signing.add(Saml2X509Credential.verification(certificate))).build();
 
-			return new InMemoryRelyingPartyRegistrationRepository(relyingPartyRegistration);
-		}
-	}
+	// 		return new InMemoryRelyingPartyRegistrationRepository(relyingPartyRegistration);
+	// 	}
+	// }
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
