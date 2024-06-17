@@ -103,6 +103,7 @@ public class ELRRStageController {
                 statementResult = statementClient.getStatements();
                 adlStatementList = statementResult.getStatements();
             } catch (Exception e) {
+                log.error("Exception:" + e.getMessage(), e);
                 adlStatementList = getStatmentsList();
             }
             for (Statement statement : adlStatementList) {
