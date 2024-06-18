@@ -77,10 +77,10 @@ public class ELRRStageController {
         }
 
 
-        StatementClient statementClient = null;
+        XapiStatementClient statementClient = null;
         List<ElrrStatement> listStatments = new ArrayList<>();
         try {
-            statementClient = new XapiStatementClient(lrsURL,
+            statementClient = (XapiStatementClient) new XapiStatementClient(lrsURL,
                     lrsUsername, lrsPassword).filterBySince(lastReadDate);
             processStatemetResults(statementClient, listStatments);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class ELRRStageController {
      * @param statementClient
      * @param listStatments
      */
-    private void processStatemetResults(final StatementClient statementClient,
+    private void processStatemetResults(final XapiStatementClient statementClient,
             final List<ElrrStatement> listStatments) {
         ArrayList<Statement> adlStatementList;
         StatementResult statementResult;
