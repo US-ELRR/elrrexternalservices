@@ -4,7 +4,6 @@
 package com.deloitte.elrr.controller;
 
 import com.deloitte.elrr.dto.ElrrStatement;
-import com.deloitte.elrr.dto.XapiStatementClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.adlnet.xapi.client.StatementClient;
 import gov.adlnet.xapi.model.StatementResult;
@@ -77,10 +76,10 @@ public class ELRRStageController {
         }
 
 
-        XapiStatementClient statementClient = null;
+        StatementClient statementClient = null;
         List<ElrrStatement> listStatments = new ArrayList<>();
         try {
-            statementClient = (XapiStatementClient) new XapiStatementClient(lrsURL,
+            statementClient = new StatementClient(lrsURL,
                     lrsUsername, lrsPassword).filterBySince(lastReadDate);
             processStatemetResults(statementClient, listStatments);
         } catch (Exception e) {
@@ -95,7 +94,7 @@ public class ELRRStageController {
      * @param statementClient
      * @param listStatments
      */
-    private void processStatemetResults(final XapiStatementClient statementClient,
+    private void processStatemetResults(final StatementClient statementClient,
             final List<ElrrStatement> listStatments) {
         ArrayList<Statement> adlStatementList;
         StatementResult statementResult;
