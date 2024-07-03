@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: ELRR External Services OpenAPI definition
+  version: v0
+servers:
+  - url: http://127.0.0.1:8080
+    description: Generated server url
+paths:
+  /api/lrsdata:
+    get:
+      tags:
+        - elrr-stage-controller
+      operationId: localData
+      parameters:
+        - name: lastReadDate
+          in: query
+          required: false
+          schema:
+            type: string
+            default: '2021-01-02T00:00:00Z'
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ElrrStatement'
+components:
+  schemas:
+    ElrrStatement:
+      type: object
+      properties:
+        actor:
+          type: string
+        actorName:
+          type: string
+        verb:
+          type: string
+        activity:
+          type: string
+        courseName:
+          type: string
+        statementjson:
+          type: string
