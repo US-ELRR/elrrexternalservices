@@ -103,6 +103,7 @@ public class ELRRStageController {
                 statementResult = statementClient.getStatements();
                 adlStatementList = statementResult.getStatements();
             } catch (Exception e) {
+                log.error("Exception:" + e.getMessage(), e);
                 adlStatementList = getStatmentsList();
             }
             for (Statement statement : adlStatementList) {
@@ -140,8 +141,7 @@ public class ELRRStageController {
                     log.info("verb after tokenizer: " + verb);
                 }
             }
-            elrrStatement.setStatementjson(new ObjectMapper().
-                    writeValueAsString(statement));
+            elrrStatement.setStatementjson(statement.serialize().toString());
             listStatments.add(elrrStatement);
         } catch (Exception e) {
             log.error("ErrorActor: ", e);
