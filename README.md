@@ -4,10 +4,12 @@ Services for integrating with external interfaces (LRS, CaSS, ECC etc)
 Setup elrrdatasync first.
 
 # Dependencies:
--Java JDK 17
+- Java JDK 17
 - git
 - Maven 3
 - Docker Desktop
+
+# Tools
 - DBeaver
 - Postman
 
