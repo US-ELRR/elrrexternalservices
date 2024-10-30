@@ -1,7 +1,7 @@
 # elrrexternalservices
 Services for integrating with external interfaces (LRS, CaSS, ECC etc)
 
-There are database and kafka dependencies, but there's a [repo with a docker-compose](https://github.com/US-ELRR/elrrdatasync/) that resolves them locally.
+There are database and kafka dependencies, but there's a [repo with a docker-compose](https://github.com/US-ELRR/elrrdockercompose/) that resolves them locally.
 
 [Setup elrrdatasync first](https://github.com/US-ELRR/elrrdatasync/)
 
