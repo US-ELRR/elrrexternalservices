@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.saml2.core.Saml2X509Credential;
-import org.springframework.security.saml2.provider.service.registration.InMemoryRelyingPartyRegistrationRepository;
-import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistration;
-import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
-import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrations;
+//import org.springframework.security.saml2.core.Saml2X509Credential;
+//import org.springframework.security.saml2.provider.service.registration.InMemoryRelyingPartyRegistrationRepository;
+//import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistration;
+//import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
+//import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrations;
 import org.springframework.security.web.SecurityFilterChain;
-import static org.springframework.security.config.Customizer.withDefaults;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateFactory;
+//import static org.springframework.security.config.Customizer.withDefaults;
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.core.io.Resource;
+//import java.security.cert.X509Certificate;
+//import java.security.cert.CertificateFactory;
 
-import java.io.InputStream;
+//import java.io.InputStream;
 
 @Slf4j
 @Configuration
