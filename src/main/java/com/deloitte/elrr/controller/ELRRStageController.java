@@ -1,6 +1,4 @@
-/**
- *
- */
+/** */
 package com.deloitte.elrr.controller;
 
 import java.io.IOException;
@@ -22,52 +20,49 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author mnelakurti
- *
  */
 @RestController
 @RequestMapping("api")
 @Slf4j
 public class ELRRStageController {
 
-    @Value("${lrs.url}")
-    private String lrsURL;
+  @Value("${lrs.url}")
+  private String lrsURL;
 
-    @Value("${lrs.username}")
-    private String lrsUsername;
+  @Value("${lrs.username}")
+  private String lrsUsername;
 
-    @Value("${lrs.password}")
-    private String lrsPassword;
+  @Value("${lrs.password}")
+  private String lrsPassword;
 
-    /**
-     * This for returning the localData.
-     *
-     * @param lastReadDate String
-     * @return ResponseEntity
-     */
-    @GetMapping("/lrsdata")
-    public ResponseEntity<List<Statement>> localData(  // PHL
-            @RequestParam(value = "lastReadDate",
-            defaultValue = "2021-01-02T00:00:00Z")
-            final String lastReadDate) {
-        try {
-            OffsetDateTime.parse(lastReadDate);
-        } catch (DateTimeParseException e) {
-            log.error("Invalid last read date");
-            return ResponseEntity.badRequest().build();
-        }
-
-        StatementClient statementClient = null;
-        List<Statement> listStatements = new ArrayList<>();  // PHL
-        
-        try {
-            statementClient = new StatementClient(lrsURL, lrsUsername, lrsPassword).filterBySince(lastReadDate);
-            listStatements = statementClient.getStatements().getStatements();  // PHL
-        } catch (IOException e) {
-            log.error("Exception:" + e.getMessage(), e);
-        }
-        
-        return ResponseEntity.ok(listStatements);
-
+  /**
+   * This for returning the localData.
+   *
+   * @param lastReadDate String
+   * @return ResponseEntity
+   */
+  @GetMapping("/lrsdata")
+  public ResponseEntity<List<Statement>> localData(
+      @RequestParam(value = "lastReadDate", defaultValue = "2021-01-02T00:00:00Z")
+          final String lastReadDate) {
+    try {
+      OffsetDateTime.parse(lastReadDate);
+    } catch (DateTimeParseException e) {
+      log.error("Invalid last read date");
+      return ResponseEntity.badRequest().build();
     }
 
+    StatementClient statementClient = null;
+    List<Statement> listStatements = new ArrayList<>();
+
+    try {
+      statementClient =
+          new StatementClient(lrsURL, lrsUsername, lrsPassword).filterBySince(lastReadDate);
+      listStatements = statementClient.getStatements().getStatements();
+    } catch (IOException e) {
+      log.error("Exception:" + e.getMessage(), e);
+    }
+
+    return ResponseEntity.ok(listStatements);
+  }
 }
