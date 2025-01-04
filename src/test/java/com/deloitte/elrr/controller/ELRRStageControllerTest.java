@@ -118,7 +118,7 @@ class ELRRStageControllerTest {
   }
 
   /**
-   * @return List<ElrrStatement>
+   * @return List<Statement>
    */
   private static ArrayList<Statement> getStatmentsList() {
     ArrayList<Statement> listStatments = new ArrayList<Statement>();
