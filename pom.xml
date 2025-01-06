@@ -300,11 +300,16 @@
 			<artifactId>sa-token-core</artifactId>
 			<version>1.37.0</version>
 		</dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.8.25</version>
+        </dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
-			<artifactId>hutool-core</artifactId>
-			<version>5.8.25</version>
-		</dependency>
+            <groupId>com.yetanalytics</groupId>
+            <artifactId>xapi-tools</artifactId>
+            <version>0.0.1</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
