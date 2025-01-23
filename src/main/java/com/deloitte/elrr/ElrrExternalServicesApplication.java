@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package com.deloitte.elrr;
 
 import org.springframework.boot.SpringApplication;
@@ -17,29 +13,26 @@ import lombok.Generated;
 
 @SpringBootApplication
 @EnableEncryptableProperties
-@Import({ JacksonAutoConfiguration.class })
+@Import({JacksonAutoConfiguration.class})
 public class ElrrExternalServicesApplication {
 
-    /**
-     * This for for running application / Entry point for this.
-     *
-     * @param args String[]
-     */
-    @Generated
-    public static void main(final String[] args) {
-       SpringApplication.run(ElrrExternalServicesApplication.class, args);
-    }
+  /**
+   * This for for running application / Entry point for this.
+   *
+   * @param args String[]
+   */
+  @Generated
+  public static void main(final String[] args) {
+    SpringApplication.run(ElrrExternalServicesApplication.class, args);
+  }
 
-    /**
-     * This for returning the Rest Template.
-     *
-     * @return RestTemplate
-     */
-    @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
-
-
-
+  /**
+   * This for returning the Rest Template.
+   *
+   * @return RestTemplate
+   */
+  @Bean
+  public RestTemplate getRestTemplate() {
+    return new RestTemplate();
+  }
 }
