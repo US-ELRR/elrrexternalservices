@@ -1,4 +1,3 @@
-/** */
 package com.deloitte.elrr;
 
 import org.springframework.boot.SpringApplication;
