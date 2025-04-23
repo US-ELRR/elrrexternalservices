@@ -1,12 +1,14 @@
 /** */
 package com.deloitte.elrr.controller;
 
-import com.deloitte.elrr.dto.ElrrStatement;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.adlnet.xapi.client.StatementClient;
-import gov.adlnet.xapi.model.Statement;
-import gov.adlnet.xapi.model.StatementResult;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import gov.adlnet.xapi.client.StatementClient;
+import gov.adlnet.xapi.model.Statement;
+import gov.adlnet.xapi.model.StatementResult;
 
 /**
  * @author mnelakurti
@@ -93,10 +94,9 @@ class ELRRStageControllerTest {
     }
     assertEquals(null, servletResponse.getErrorMessage());
     ObjectMapper mapper = new ObjectMapper();
-    List<ElrrStatement> responseListStatments =
+    List<Statement> responseListStatments =
         mapper.readValue(
-            mvcResult.getResponse().getContentAsString(),
-            new TypeReference<List<ElrrStatement>>() {});
+            mvcResult.getResponse().getContentAsString(), new TypeReference<List<Statement>>() {});
     assertEquals(1, responseListStatments.size());
   }
 
