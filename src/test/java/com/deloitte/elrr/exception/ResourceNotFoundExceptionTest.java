@@ -1,5 +1,5 @@
 /** */
-package com.deloitte.elrr.test.exception;
+package com.deloitte.elrr.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

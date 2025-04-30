@@ -1,4 +1,4 @@
-package com.deloitte.elrr.test;
+package com.deloitte.elrr;
 
 
 import org.junit.Test;

@@ -1,5 +1,5 @@
 /** */
-package com.deloitte.elrr.test.controller;
+package com.deloitte.elrr.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
