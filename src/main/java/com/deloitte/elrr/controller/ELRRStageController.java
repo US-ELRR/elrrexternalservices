@@ -47,6 +47,7 @@ public class ELRRStageController {
      * @param lastReadDate String
      * @return ResponseEntity
      */
+    @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
     public ResponseEntity<String> localData(
             @RequestParam(value = "lastReadDate", defaultValue = "2021-01-02T00:00:00Z") final String lastReadDate) {
@@ -64,7 +65,8 @@ public class ELRRStageController {
         List<Statement> listStatements = new ArrayList<>();
 
         try {
-            statementClient = new StatementClient(lrsURL, lrsUsername, lrsPassword).filterBySince(lastReadDate);
+            statementClient = new StatementClient(lrsURL, lrsUsername,
+                    lrsPassword).filterBySince(lastReadDate);
             listStatements = statementClient.getStatements().getStatements();
             result = gsonToJson(listStatements);
         } catch (Exception e) {
@@ -82,7 +84,8 @@ public class ELRRStageController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Actor.class, new ActorAdapter());
-        builder.registerTypeAdapter(IStatementObject.class, new StatementObjectAdapter());
+        builder.registerTypeAdapter(IStatementObject.class,
+                new StatementObjectAdapter());
         Gson gson = builder.create();
         return gson.toJson(listStatements);
 
