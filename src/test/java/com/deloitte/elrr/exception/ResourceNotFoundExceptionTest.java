@@ -1,25 +1,26 @@
-/** */
 package com.deloitte.elrr.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.deloitte.elrr.exception.ResourceNotFoundException;
-
 /**
  * @author mnelakurti
  */
+@SuppressWarnings("checkstyle:linelength")
 public class ResourceNotFoundExceptionTest {
 
-  private final String message = "ResourceNotFoundException" + "Exception Message";
+    private final String message = "ResourceNotFoundException"
+            + "Exception Message";
 
-  private ResourceNotFoundException resourceNotFoundException =
-      new ResourceNotFoundException(message);
-  ;
+    private ResourceNotFoundException resourceNotFoundException = new ResourceNotFoundException(
+            message);
 
-  @Test
-  public void testTipExceptionWithMessage() {
-    assertEquals(resourceNotFoundException.getMessage(), message);
-  }
+    /**
+     * @author phleven
+     */
+    @Test
+    public void testTipExceptionWithMessage() {
+        assertEquals(resourceNotFoundException.getMessage(), message);
+    }
 }
