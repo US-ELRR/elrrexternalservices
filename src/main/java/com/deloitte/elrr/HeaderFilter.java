@@ -18,35 +18,37 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HeaderFilter implements Filter {
 
-	@Value("${check.http.header}")
-	private boolean checkHttpHeader;
+    @Value("${check.http.header}")
+    private boolean checkHttpHeader;
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
 
-		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-		try {
+        try {
 
-			if (!checkHttpHeader) {
-				chain.doFilter(request, response);
-			} else {
+            if (!checkHttpHeader) {
+                chain.doFilter(request, response);
+            } else {
 
-				if ("https".equalsIgnoreCase(httpServletRequest.getHeader("X-Forwarded-Proto"))) {
-					chain.doFilter(request, response);
-				} else {
-					log.error("Not a HTTPS request.");
-					((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN,
-							"Not a HTTPS request.");
-				}
+                if ("https".equalsIgnoreCase(httpServletRequest.getHeader(
+                        "X-Forwarded-Proto"))) {
+                    chain.doFilter(request, response);
+                } else {
+                    log.error("Not a HTTPS request.");
+                    ((HttpServletResponse) response).sendError(
+                            HttpServletResponse.SC_FORBIDDEN,
+                            "Not a HTTPS request.");
+                }
 
-			}
+            }
 
-		} catch (IOException | ServletException e) {
-			log.error("Error: " + e.getMessage());
-			e.printStackTrace();
-			return;
-		}
-	}
+        } catch (IOException | ServletException e) {
+            log.error("Error: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+    }
 }

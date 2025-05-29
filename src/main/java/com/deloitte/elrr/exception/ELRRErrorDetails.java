@@ -23,6 +23,7 @@ public class ELRRErrorDetails {
      *
      */
     private List<String> details;
+
     /**
      *
      * @param argsTimestamp
@@ -31,13 +32,14 @@ public class ELRRErrorDetails {
      * @param argsDetails
      */
     public ELRRErrorDetails(final Date argsTimestamp, final String argsMessage,
-                            final String argsPath, final List<String> argsDetails) {
+            final String argsPath, final List<String> argsDetails) {
         super();
         this.timestamp = argsTimestamp;
         this.message = argsMessage;
         this.path = argsPath;
         this.details = argsDetails;
     }
+
     /**
      *
      * @return Date
@@ -45,6 +47,7 @@ public class ELRRErrorDetails {
     public Date getTimestamp() {
         return timestamp;
     }
+
     /**
      *
      * @return String
@@ -52,6 +55,7 @@ public class ELRRErrorDetails {
     public String getMessage() {
         return message;
     }
+
     /**
      *
      * @return String
@@ -59,6 +63,7 @@ public class ELRRErrorDetails {
     public String getPath() {
         return path;
     }
+
     /**
      *
      * @return String

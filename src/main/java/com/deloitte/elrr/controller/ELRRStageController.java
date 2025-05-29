@@ -41,6 +41,7 @@ public class ELRRStageController {
      * @param String
      * @return ResponseEntity
      */
+    @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
     public ResponseEntity<List<Statement>> localData(
             @RequestParam(value = "lastReadDate", defaultValue = "2021-01-02T00:00:00Z") final String lastReadDate) {
@@ -62,9 +63,7 @@ public class ELRRStageController {
             log.error("Invalid last read date");
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok(result);
 
     }
-
 }
