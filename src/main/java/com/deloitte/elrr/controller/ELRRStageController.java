@@ -36,10 +36,8 @@ public class ELRRStageController {
     private String lrsPassword;
 
     /**
-     * This for returning the localData.
-     *
-     * @param String
-     * @return ResponseEntity
+     * @param lastReadDate
+     * @return RersponseEntity
      */
     @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
