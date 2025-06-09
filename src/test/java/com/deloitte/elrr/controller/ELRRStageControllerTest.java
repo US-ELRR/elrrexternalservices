@@ -2,6 +2,7 @@ package com.deloitte.elrr.controller;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -48,6 +51,7 @@ class ELRRStageControllerTest {
     private StatementResult statementResult;
 
     @Test
+    @WithMockUser
     void testlocalData() throws Exception {
 
         try {
@@ -196,9 +200,26 @@ class ELRRStageControllerTest {
             assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
-            fail("Should not have thrown any exception");
+            fail("Should not have thrown any exception");  
         }
 
+    }
+
+    @Test
+    @WithMockUser
+    void testLocalDataInvalidDate() throws Exception {
+        try {
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST")
+                .accept(MediaType.APPLICATION_JSON).contentType(
+                MediaType.APPLICATION_JSON);
+            
+            mockMvc.perform(requestBuilder).andExpect(status()
+                .isBadRequest()).andDo(print());
+
+        } catch (Exception e) {
+            fail("Should not have thrown any exception");  
+        }
     }
 
 }
