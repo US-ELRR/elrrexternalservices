@@ -34,3 +34,6 @@ hs_err_pid*
 ### Eclipse ###
 .project
 .factorypath
+
+### VS Code ###
+.vscode/
