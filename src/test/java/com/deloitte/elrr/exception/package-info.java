@@ -7,7 +7,7 @@
 /**
  * @author mnelakurti
  *
- *         This package info file for package com.deloitte.elrr.util
+ *         This package info file for package com.deloitte.elrr.exception
  *
  */
-package com.deloitte.elrr.util;
+package com.deloitte.elrr.exception;
