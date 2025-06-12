@@ -1,44 +1,35 @@
-# elrrexternalservices API
+# elrrexternalservices
 Services for integrating with external interfaces (LRS, CaSS, ECC etc)
 
-## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+There are database and kafka dependencies, but there's a [repo with a docker-compose](https://github.com/US-ELRR/elrrdockercompose/) that resolves them locally.
 
-# Requirements
-For building and running the elrrexternalservices you need:
+[Setup elrrdatasync first](https://github.com/US-ELRR/elrrdatasync/)
 
-`Java >=1.8` : Download and install Java from here 
-* [Java](https://www.oracle.com/java/technologies/downloads/).
+# Dependencies
+- [Java JDK 1.8](https://www.oracle.com/java/technologies/downloads/)
+- [git](https://git-scm.com/downloads)
+- [Maven](https://maven.apache.org/)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
-`Maven >=3.6` : Download and install Apache Maven from here 
-* [Maven](https://maven.apache.org/) - Dependency Management.
+# Tools
+- SQL client or Terminal
+- [Postman](https://www.postman.com/downloads/)
+- [Eclipse](https://www.eclipse.org/downloads/packages/) or other IDE
 
-`Postgres >=11` : Download and install Postgres from here 
-* [Postgres](https://www.postgresql.org/download/). 
+# Build the application
+- mvn clean install
 
-`Docker` : Download and install Docker from here 
-*[Docker](https://www.docker.com/products/docker-desktop).
-
-# Running the application locally
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the main method in the com.deloitte.elrr.ElrrExternalServicesApplication class from your IDE
-
-1. Clone the Github repository:
-
-   [GitHub-US-ELRR](https://github.com/US-ELRR/elrrservices)
-
-2. Open terminal at the root directory of the project.
-    
-    example: ~/elrrexternalservices
-
-3. Run command to install all the requirements from requirements.txt 
-    
-    mvn spring-boot:run
-
-4. Once the installation and build are done, Once the server is up you can   access API using below URL
-    
-    http://localhost:8088/api/lrsdata?lastReadDate=<Date a parameter in this format>
-	
-	e.g 2021-01-10T00:00:00Z
+# Run Postman to populate lrs-db
+1. Postman
+   a. POST http://localhost:8083/xapi/statements
+   b. Headers
+      1. key = X-Experience-API-Version
+      2. value = 1.0.3
+   c. Body raw, JSON
+[
+  {"actor":{"name":"John Doe","mbox":"mailto:JohnDoe@gmailcom"},"verb":{"id":"https://adlnet.gov/expapi/verbs/achieved","display":{"en-us":"Achieved"}},"object":{"id":"https://w3id.org/xapi/credential/GIAC%20Security%20Essentials%20Certification%20%28GSEC%29","objectType":"Activity","definition":{"name":{"en-us":"GIAC Security Essentials Certification (GSEC)"},"type":"https://yetanalytics.com/deloitte-edlm/demo-profile/certificate"}},"stored":"2024-09-20T21:37:23.835000000Z","authority":{"account":{"homePage":"http://example.org","name":"0192115b-03d0-849f-8a65-f217ffbe2207"},"objectType":"Agent"},"id":"d9f1328b-bcc2-4b9c-b954-03cb88a240c8","timestamp":"2024-09-20T21:37:23.835000000Z","version":"1.0.0"}
+]
 
 # Deploying the application to Docker 
 The easiest way to deploy the sample application to Docker is to follow below steps:
@@ -51,7 +42,11 @@ The easiest way to deploy the sample application to Docker is to follow below st
 
 4. docker run -p 8088:8088 -t <docker_hub>/newrepository:elrrexternalservices-dck-img
 
+# Running the application using the Spring Boot Maven plugin: 
+- mvn clean
+- mvn spring-boot:run -D"spring-boot.run.profiles"=local -e (Windows)
+- mvn spring-boot:run -D spring-boot.run.profiles=local -e  (Linux)
+- Ctrl+C to end --> Terminate batch job = Y
+
 # Optional step 
-1. docker push <docker_hub>/newrepository:elrrexternalservices-dck-img
-
-
+- docker push <docker_hub>/newrepository:elrrexternalservices-dck-img

@@ -3,8 +3,11 @@
  *
  * Copyright (c) 2021 Deloitte Inc. All Rights Reserved.
  */
+
 /**
  * @author mnelakurti
  *
+ *         This package info file for package com.deloitte.elrr.util
+ *
  */
-package com.deloitte.elrr.exception;
+package com.deloitte.elrr.util;

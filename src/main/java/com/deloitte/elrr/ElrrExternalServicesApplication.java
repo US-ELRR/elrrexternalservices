@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package com.deloitte.elrr;
 
 import org.springframework.boot.SpringApplication;
@@ -27,7 +23,7 @@ public class ElrrExternalServicesApplication {
      */
     @Generated
     public static void main(final String[] args) {
-       SpringApplication.run(ElrrExternalServicesApplication.class, args);
+        SpringApplication.run(ElrrExternalServicesApplication.class, args);
     }
 
     /**
@@ -39,7 +35,4 @@ public class ElrrExternalServicesApplication {
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
-
-
-
 }

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.6</version>
+		<version>3.1.11</version>
 		<relativePath />
 	</parent>
 	<groupId>com.deloitte</groupId>
@@ -24,10 +24,15 @@
 		<sonar.dynamicAnalysis>resuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 		<sona.lauguage>java</sona.lauguage>
-		<spring-security.version>6.1.7</spring-security.version>
+		<spring-security.version>6.2.3</spring-security.version>
 	</properties>
 	<dependencies>
-		<dependency>
+	    <dependency>
+            <groupId>com.yetanalytics</groupId>
+            <artifactId>xapi-tools</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+ 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-shared-utils</artifactId>
 			<version>3.3.3</version>
@@ -38,10 +43,10 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>								 
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>3.0.7</version>
+			<version>3.1.6</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework</groupId>
@@ -52,7 +57,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>6.1.5</version>
+			<version>6.0.23</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -87,7 +92,7 @@
 					<groupId>com.vaadin.external.google</groupId>
 					<artifactId>android-json</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.yaml</groupId>
@@ -95,14 +100,14 @@
 			<version>2.2</version>
 		</dependency>
 		<dependency>
+			<groupId>org.zaproxy</groupId>
+			<artifactId>zap</artifactId>
+			<version>2.14.0</version>
+		</dependency>
+		<dependency>
 			<groupId>fr.spacefox</groupId>
 			<artifactId>confusable-homoglyphs</artifactId>
 			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -162,37 +167,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>gov.adlnet</groupId>
-			<artifactId>jxapi</artifactId>
-			<version>2.0.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>bcprov-jdk16</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-io</groupId>
-					<artifactId>commons-io</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-utils</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.maven</groupId>
-					<artifactId>maven-artifact-manager</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-interpolation</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-container-default</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
@@ -204,24 +178,19 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.17.0</version>
+			<version>2.15.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
 			<artifactId>yasson</artifactId>
 			<version>3.0.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-    		<groupId>org.apache.tomcat.embed</groupId>
-    		<artifactId>tomcat-embed-core</artifactId>
-    		<version>11.0.0-M18</version>
-		</dependency>
-		<dependency>
-    		<groupId>com.fasterxml.jackson.core</groupId>
-    		<artifactId>jackson-databind</artifactId>
-    		<version>2.17.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
@@ -240,7 +209,7 @@
 		<dependency>
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-json</artifactId>
-			<version>5.8.27</version>
+			<version>5.8.22</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.codehaus.plexus</groupId>
@@ -251,7 +220,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.26.1</version>
+			<version>1.26.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.surefire</groupId>
@@ -278,7 +247,7 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk18on</artifactId>
-			<version>1.77</version>
+			<version>1.74</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -286,9 +255,9 @@
 			<version>32.0.1-jre</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.santuario</groupId>
-    		<artifactId>xmlsec</artifactId>
-    		<version>2.2.6</version>
+			<groupId>org.apache.santuario</groupId>
+			<artifactId>xmlsec</artifactId>
+			<version>2.2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -300,6 +269,16 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.4.12</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.dev33</groupId>
+			<artifactId>sa-token-core</artifactId>
+			<version>1.37.0</version>
+		</dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.8.25</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -318,7 +297,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>							   
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 			<plugin>
@@ -363,6 +342,27 @@
 				<artifactId>jasypt-maven-plugin</artifactId>
 				<version>3.0.5</version>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -389,27 +389,27 @@
 		</profile>
 	</profiles>
 	<repositories>
-        <repository>
-            <id>shibboleth_repository</id>
-            <name>Shibboleth Maven Repository</name>
-            <url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>shibboleth_repository_2</id>
-            <name>Shibboleth Maven Repository (https://mvnrepository.com/artifact/org.opensaml/opensaml-core/4.1.1)</name>
-            <url>https://build.shibboleth.net/maven/releases/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>shibboleth_repository</id>
-            <name>Shibboleth Maven Repository</name>
-            <url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>shibboleth_repository_2</id>
-            <name>Shibboleth Maven Repository (https://mvnrepository.com/artifact/org.opensaml/opensaml-core/4.1.1)</name>
-            <url>https://build.shibboleth.net/maven/releases/</url>
-        </pluginRepository>
-    </pluginRepositories>
+		<repository>
+			<id>shibboleth_repository</id>
+			<name>Shibboleth Maven Repository</name>
+			<url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>shibboleth_repository_2</id>
+			<name>Shibboleth Maven Repository (https://mvnrepository.com/artifact/org.opensaml/opensaml-core/4.1.1)</name>
+			<url>https://build.shibboleth.net/maven/releases/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>shibboleth_repository</id>
+			<name>Shibboleth Maven Repository</name>
+			<url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>shibboleth_repository_2</id>
+			<name>Shibboleth Maven Repository (https://mvnrepository.com/artifact/org.opensaml/opensaml-core/4.1.1)</name>
+			<url>https://build.shibboleth.net/maven/releases/</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
