@@ -27,7 +27,12 @@
 		<spring-security.version>6.2.3</spring-security.version>
 	</properties>
 	<dependencies>
-		<dependency>
+	    <dependency>
+            <groupId>com.yetanalytics</groupId>
+            <artifactId>xapi-tools</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+ 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-shared-utils</artifactId>
 			<version>3.3.3</version>
@@ -162,37 +167,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>gov.adlnet</groupId>
-			<artifactId>jxapi</artifactId>
-			<version>2.0.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>bcprov-jdk16</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-io</groupId>
-					<artifactId>commons-io</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-utils</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.maven</groupId>
-					<artifactId>maven-artifact-manager</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-interpolation</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-container-default</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
@@ -305,11 +279,6 @@
             <artifactId>hutool-core</artifactId>
             <version>5.8.25</version>
         </dependency>
-		<dependency>
-            <groupId>com.yetanalytics</groupId>
-            <artifactId>xapi-tools</artifactId>
-            <version>0.0.1</version>
-        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -373,6 +342,27 @@
 				<artifactId>jasypt-maven-plugin</artifactId>
 				<version>3.0.5</version>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<profiles>

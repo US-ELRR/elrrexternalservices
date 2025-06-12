@@ -7,7 +7,7 @@
 /**
  * @author mnelakurti
  *
- *This package info file for package com.deloitte.elrr.dto
+ *         This package info file for package com.deloitte.elrr.util
  *
  */
-package com.deloitte.elrr.dto;
+package com.deloitte.elrr.util;

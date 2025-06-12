@@ -1,129 +1,223 @@
-/** */
 package com.deloitte.elrr.controller;
 
-import com.deloitte.elrr.dto.ElrrStatement;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.adlnet.xapi.client.StatementClient;
-import gov.adlnet.xapi.model.Statement;
-import gov.adlnet.xapi.model.StatementResult;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.deloitte.elrr.util.TestFileUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yetanalytics.xapi.client.StatementClient;
+import com.yetanalytics.xapi.client.filters.StatementFilters;
+import com.yetanalytics.xapi.model.Statement;
+import com.yetanalytics.xapi.model.StatementResult;
+import com.yetanalytics.xapi.util.Mapper;
 
 /**
  * @author mnelakurti
  */
 @WebMvcTest(ELRRStageController.class)
+@SuppressWarnings("checkstyle:linelength")
 class ELRRStageControllerTest {
 
-  @Autowired private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @Mock private StatementClient statementClient;
+    @Mock
+    private StatementClient statementClient;
 
-  @Mock private StatementResult statementResult;
+    @Mock
+    private StatementResult statementResult;
 
-  @Test
-  void testlocalData() throws Exception {
-    when(statementClient.filterBySince("2021-01-02T00:00:00Z")).thenReturn(statementClient);
-    when(statementClient.getStatements()).thenReturn(statementResult);
-    when(statementResult.getStatements()).thenReturn(getStatmentsList());
-    MockHttpServletRequestBuilder requestBuilder =
-        MockMvcRequestBuilders.get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON);
-    MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-    MockHttpServletResponse servletResponse = mvcResult.getResponse();
-    if (servletResponse.getStatus() == 401) {
-      return;
+    @Test
+    @WithMockUser
+    void testlocalData() throws Exception {
+
+        try {
+
+            File testFile = TestFileUtil.getJsonTestFile("competency.json");
+
+            Statement stmt = Mapper.getMapper().readValue(testFile,
+                    Statement.class);
+
+            List<Statement> list = Arrays.asList(stmt);
+
+            String lastReadDate = "2021-01-02T00:00:00Z";
+            StatementFilters filters = new StatementFilters();
+            filters.setSince(lastReadDate);
+
+            when(statementClient.getStatements(filters)).thenReturn(list);
+
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
+                            MediaType.APPLICATION_JSON);
+            MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+            MockHttpServletResponse servletResponse = mvcResult.getResponse();
+            if (servletResponse.getStatus() == 401) {
+                return;
+            }
+            assertEquals(null, servletResponse.getErrorMessage());
+
+        } catch (IOException e) {
+            fail("Should not have thrown any exception");
+        }
+
     }
-    assertEquals(null, servletResponse.getErrorMessage());
-  }
 
-  @Test
-  void testlocalDataSize() throws Exception {
-    when(statementClient.filterBySince("2022-12-10T00:00:00Z")).thenReturn(statementClient);
-    when(statementResult.getStatements()).thenReturn(getStatmentsList());
-    MockHttpServletRequestBuilder requestBuilder =
-        MockMvcRequestBuilders.get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON);
-    // mockMvc.perform(requestBuilder).andExpect(status().isOk())
-    //        .andDo(print());
-    mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized()).andDo(print());
-    MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
-    MockHttpServletResponse servletResponse = mvcResult.getResponse();
-    if (servletResponse.getStatus() == 401) {
-      return;
+    @Test
+    void testlocalDataSize() throws Exception {
+
+        try {
+
+            File testFile = TestFileUtil.getJsonTestFile("competency.json");
+
+            Statement stmt = Mapper.getMapper().readValue(testFile,
+                    Statement.class);
+
+            List<Statement> list = Arrays.asList(stmt);
+
+            String lastReadDate = "2021-01-02T00:00:00Z";
+            StatementFilters filters = new StatementFilters();
+            filters.setSince(lastReadDate);
+
+            when(statementClient.getStatements(filters)).thenReturn(list);
+
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
+                            MediaType.APPLICATION_JSON);
+            mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
+                    .andDo(print());
+            MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
+                    .andReturn();
+            MockHttpServletResponse servletResponse = mvcResult.getResponse();
+            if (servletResponse.getStatus() == 401) {
+                return;
+            }
+            assertEquals(null, servletResponse.getErrorMessage());
+
+        } catch (IOException e) {
+            fail("Should not have thrown any exception");
+        }
+
     }
-    assertEquals(null, servletResponse.getErrorMessage());
-  }
 
-  @Test
-  void testlocalDataStatusOK() throws Exception {
-    when(statementClient.filterBySince("2022-12-10T00:00:00Z")).thenReturn(statementClient);
-    when(statementResult.getStatements()).thenReturn(getStatmentsList());
+    @Test
+    void testlocalDataStatusOK() throws Exception {
 
-    MockHttpServletRequestBuilder requestBuilder =
-        MockMvcRequestBuilders.get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON);
-    // mockMvc.perform(requestBuilder).andExpect(status().isOk())
-    //        .andDo(print());
-    mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized()).andDo(print());
-    MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
-    MockHttpServletResponse servletResponse = mvcResult.getResponse();
-    if (servletResponse.getStatus() == 401) {
-      return;
+        try {
+
+            File testFile = TestFileUtil.getJsonTestFile("competency.json");
+
+            Statement stmt = Mapper.getMapper().readValue(testFile,
+                    Statement.class);
+
+            List<Statement> list = Arrays.asList(stmt);
+
+            String lastReadDate = "2021-01-02T00:00:00Z";
+            StatementFilters filters = new StatementFilters();
+            filters.setSince(lastReadDate);
+
+            when(statementClient.getStatements(filters)).thenReturn(list);
+
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
+                            MediaType.APPLICATION_JSON);
+            mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
+                    .andDo(print());
+            MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
+                    .andReturn();
+            MockHttpServletResponse servletResponse = mvcResult.getResponse();
+            if (servletResponse.getStatus() == 401) {
+                return;
+            }
+            assertEquals(null, servletResponse.getErrorMessage());
+            ObjectMapper mapper = new ObjectMapper();
+            List<Statement> responseListStatments = mapper.readValue(mvcResult
+                    .getResponse().getContentAsString(), new TypeReference<List<
+                            Statement>>() {
+                    });
+            assertEquals(1, responseListStatments.size());
+
+        } catch (IOException e) {
+            fail("Should not have thrown any exception");
+        }
+
     }
-    assertEquals(null, servletResponse.getErrorMessage());
-    ObjectMapper mapper = new ObjectMapper();
-    List<ElrrStatement> responseListStatments =
-        mapper.readValue(
-            mvcResult.getResponse().getContentAsString(),
-            new TypeReference<List<ElrrStatement>>() {});
-    assertEquals(1, responseListStatments.size());
-  }
 
-  @Test
-  void testlocalDataStatusResult() throws Exception {
-    when(statementClient.getStatements()).thenReturn(statementResult);
-    when(statementResult.getStatements()).thenReturn(getStatmentsList());
-    MockHttpServletRequestBuilder requestBuilder =
-        MockMvcRequestBuilders.get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON);
-    mockMvc.perform(requestBuilder).andExpect(status().is4xxClientError()).andDo(print());
-    MvcResult mvcResult = this.mockMvc.perform(requestBuilder).andReturn();
-    MockHttpServletResponse servletResponse = mvcResult.getResponse();
-    if (servletResponse.getStatus() == 401) {
-      return;
+    @Test
+    void testlocalDataStatusResult() throws Exception {
+        try {
+
+            File testFile = TestFileUtil.getJsonTestFile("competency.json");
+
+            Statement stmt = Mapper.getMapper().readValue(testFile,
+                    Statement.class);
+
+            List<Statement> list = Arrays.asList(stmt);
+
+            String lastReadDate = "2021-01-02T00:00:00Z";
+            StatementFilters filters = new StatementFilters();
+            filters.setSince(lastReadDate);
+
+            when(statementClient.getStatements(filters)).thenReturn(list);
+
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
+                            MediaType.APPLICATION_JSON);
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
+            MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
+                    .andReturn();
+            MockHttpServletResponse servletResponse = mvcResult.getResponse();
+            if (servletResponse.getStatus() == 401) {
+                return;
+            }
+            assertEquals(null, servletResponse.getErrorMessage());
+
+        } catch (IOException e) {
+            fail("Should not have thrown any exception");
+        }
+
     }
-    assertEquals(null, servletResponse.getErrorMessage());
-  }
 
-  /**
-   * @return List<Statement>
-   */
-  private static ArrayList<Statement> getStatmentsList() {
-    ArrayList<Statement> listStatments = new ArrayList<Statement>();
-    Statement statement = new Statement();
-    listStatments.add(statement);
-    return listStatments;
-  }
+    @Test
+    @WithMockUser
+    void testLocalDataInvalidDate() throws Exception {
+        try {
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST")
+                .accept(MediaType.APPLICATION_JSON).contentType(
+                MediaType.APPLICATION_JSON);
+
+            mockMvc.perform(requestBuilder).andExpect(status()
+                .isBadRequest()).andDo(print());
+
+        } catch (Exception e) {
+            fail("Should not have thrown any exception");
+        }
+    }
+
 }
