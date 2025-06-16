@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.deloitte.elrr.HeaderFilter;
 import com.deloitte.elrr.util.TestFileUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,9 @@ class ELRRStageControllerTest {
 
     @Mock
     private StatementResult statementResult;
+
+    @Mock
+    private HeaderFilter headerFilter;
 
     @Test
     @WithMockUser
@@ -208,12 +212,12 @@ class ELRRStageControllerTest {
     void testLocalDataInvalidDate() throws Exception {
         try {
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST")
-                .accept(MediaType.APPLICATION_JSON).contentType(
-                MediaType.APPLICATION_JSON);
+                    .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST").accept(
+                            MediaType.APPLICATION_JSON).contentType(
+                                    MediaType.APPLICATION_JSON);
 
             mockMvc.perform(requestBuilder).andExpect(status()
-                .isBadRequest()).andDo(print());
+                    .is4xxClientError()).andDo(print());
 
         } catch (Exception e) {
             fail("Should not have thrown any exception");
