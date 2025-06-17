@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 
 public class FilterTest {
@@ -124,5 +126,55 @@ public class FilterTest {
         MockFilterChain chain = new MockFilterChain();
         hf.doFilter(http, res, chain);
         assertFalse(res.isCommitted());
+    }
+
+    @Test
+    void testHeaderFilterHttps() throws IOException, ServletException {
+        // Set the checkHttpHeader to true to enable header checking,
+        ReflectionTestUtils.setField(hf, "checkHttpHeader", true);
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-Proto", "https");
+
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
+
+        hf.doFilter(req, res, chain);
+
+        assertFalse(res.isCommitted());
+    }
+
+    @Test
+    void testHeaderFilterNotHttps() throws IOException, ServletException {
+        // Set the checkHttpHeader to true to enable header checking,
+        ReflectionTestUtils.setField(hf, "checkHttpHeader", true);
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-Proto", "testNotHttps");
+
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
+
+        hf.doFilter(req, res, chain);
+
+        assertTrue(res.isCommitted());
+        // Should return Forbidden
+        assertEquals(403, res.getStatus());
+    }
+
+    @Test
+    void testHeaderFilterExceptionHandling() throws IOException, ServletException {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-Proto", "https");
+
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        
+        FilterChain exceptionChain = (requ, resp) -> {
+            throw new IOException("Test the exception handling");
+        };
+
+        hf.doFilter(req, res, exceptionChain);
+        
+        assertFalse(res.isCommitted());   
     }
 }
