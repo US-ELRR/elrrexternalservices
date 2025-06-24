@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,7 +22,7 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>resuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-		<sona.lauguage>java</sona.lauguage>
+		<sonar.language>java</sonar.language>
 		<tomcat.version>10.1.42</tomcat.version>
 		<spring-security.version>6.3.10</spring-security.version>
 		<spring-framework.version>6.2.8</spring-framework.version>
@@ -71,13 +71,13 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<!--override for spring-security-saml2-service-provider-->
+			<!--override for spring-security-saml2-service-provider -->
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity-engine-core</artifactId>
 			<version>2.4.1</version>
 		</dependency>
 		<dependency>
-			<!--override for spring-security-saml2-service-provider-->
+			<!--override for spring-security-saml2-service-provider -->
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk18on</artifactId>
 			<version>1.80</version>
@@ -316,6 +316,18 @@
 							<outputXML>true</outputXML>
 							<verbose>true</verbose>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>12.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
