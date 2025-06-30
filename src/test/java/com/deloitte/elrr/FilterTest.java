@@ -96,9 +96,15 @@ public class FilterTest {
 
     @Test
     void testSizeLimitOk() throws IOException, ServletException {
+
+        ReflectionTestUtils.setField(sl, "maxSizeLimit", 2000000L);
+        ReflectionTestUtils.setField(sl, "checkMediaTypeJson", false);
+
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addParameter("anything", "goes");
-        http = new WrappedHttp(req, "{Unwise: nap}");
+        String requestBody = "{Unwise: napping during work}";
+        req.setContent(requestBody.getBytes());
+        http = new WrappedHttp(req, requestBody);
 
         // next lines are simply to increase coverage of wrappedhttp
         http.getInputStream().available();
@@ -108,6 +114,7 @@ public class FilterTest {
         MockHttpServletResponse res = new MockHttpServletResponse();
         MockFilterChain chain = new MockFilterChain();
         sl.doFilter(http, res, chain);
+        assertEquals(res.getErrorMessage(), null);
         assertFalse(res.isCommitted());
     }
 
@@ -163,18 +170,19 @@ public class FilterTest {
     }
 
     @Test
-    void testHeaderFilterExceptionHandling() throws IOException, ServletException {
+    void testHeaderFilterExceptionHandling() throws IOException,
+            ServletException {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-Proto", "https");
 
         MockHttpServletResponse res = new MockHttpServletResponse();
-        
+
         FilterChain exceptionChain = (requ, resp) -> {
             throw new IOException("Test the exception handling");
         };
 
         hf.doFilter(req, res, exceptionChain);
-        
-        assertFalse(res.isCommitted());   
+
+        assertFalse(res.isCommitted());
     }
 }
