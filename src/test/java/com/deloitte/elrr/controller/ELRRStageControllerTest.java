@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,8 +27,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.deloitte.elrr.HeaderFilter;
 import com.deloitte.elrr.JSONRequestSizeLimitFilter;
-import com.deloitte.elrr.SanitizingFilter;
-import com.deloitte.elrr.WrappedHttp;
 import com.deloitte.elrr.util.TestFileUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,8 +55,6 @@ class ELRRStageControllerTest {
     @Mock
     private HeaderFilter headerFilter;
 
-    private final SanitizingFilter sf = new SanitizingFilter();
-    private WrappedHttp http;
     private JSONRequestSizeLimitFilter sl = new JSONRequestSizeLimitFilter();
     private HeaderFilter hf = new HeaderFilter();
 
@@ -73,6 +70,8 @@ class ELRRStageControllerTest {
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");
 
+            String body = Files.readString(testFile.toPath());
+
             Statement stmt = Mapper.getMapper().readValue(testFile,
                     Statement.class);
 
@@ -86,14 +85,13 @@ class ELRRStageControllerTest {
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
-                    .content(list.toString())
-                    .contentType(MediaType.APPLICATION_JSON);
+                    .content(body).contentType(MediaType.APPLICATION_JSON);
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
             if (servletResponse.getStatus() == 401) {
                 return;
             }
-            assertEquals("Malformed request body", servletResponse.getErrorMessage());
+            assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
             fail("Should not have thrown any exception");
@@ -108,6 +106,8 @@ class ELRRStageControllerTest {
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");
 
+            String body = Files.readString(testFile.toPath());
+
             Statement stmt = Mapper.getMapper().readValue(testFile,
                     Statement.class);
 
@@ -121,8 +121,7 @@ class ELRRStageControllerTest {
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON);
+                    .content(body).contentType(MediaType.APPLICATION_JSON);
             mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
                     .andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
@@ -146,6 +145,8 @@ class ELRRStageControllerTest {
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");
 
+            String body = Files.readString(testFile.toPath());
+
             Statement stmt = Mapper.getMapper().readValue(testFile,
                     Statement.class);
 
@@ -159,8 +160,7 @@ class ELRRStageControllerTest {
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON);
+                    .content(body).contentType(MediaType.APPLICATION_JSON);
             mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
                     .andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
@@ -171,11 +171,12 @@ class ELRRStageControllerTest {
             }
             assertEquals(null, servletResponse.getErrorMessage());
             ObjectMapper mapper = new ObjectMapper();
-            List<Statement> responseListStatments = mapper.readValue(
-                    mvcResult.getResponse().getContentAsString(),
-                    new TypeReference<List<Statement>>() {
+            List<Statement> responseListStatments = mapper.readValue(mvcResult
+                    .getResponse().getContentAsString(), new TypeReference<List<
+                            Statement>>() {
                     });
             assertEquals(1, responseListStatments.size());
+            assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
             fail("Should not have thrown any exception");
@@ -188,6 +189,8 @@ class ELRRStageControllerTest {
         try {
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");
+
+            String body = Files.readString(testFile.toPath());
 
             Statement stmt = Mapper.getMapper().readValue(testFile,
                     Statement.class);
@@ -202,10 +205,9 @@ class ELRRStageControllerTest {
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().is4xxClientError()).andDo(print());
+                    .content(body).contentType(MediaType.APPLICATION_JSON);
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -225,12 +227,12 @@ class ELRRStageControllerTest {
     void testLocalDataInvalidDate() throws Exception {
         try {
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON);
+                    .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST").accept(
+                            MediaType.APPLICATION_JSON).contentType(
+                                    MediaType.APPLICATION_JSON);
 
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().is4xxClientError()).andDo(print());
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
 
         } catch (Exception e) {
             fail("Should not have thrown any exception");
