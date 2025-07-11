@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,6 +31,10 @@ public class JSONRequestSizeLimitFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
+            if (HttpMethod.GET.matches(request.getMethod())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             if (isApplicationJson(request) && request
                     .getContentLengthLong() == -1) {
