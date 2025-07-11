@@ -56,11 +56,16 @@ public class ELRRStageController {
 
             StatementClient client = new StatementClient(lrs);
             result = client.getStatements(filters);
+            log.info("LRS response = " + result);
 
         } catch (DateTimeParseException e) {
-            log.error("Invalid last read date");
+            log.error("Invalid last read date" + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            log.error("Error " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok(result);
 
     }
