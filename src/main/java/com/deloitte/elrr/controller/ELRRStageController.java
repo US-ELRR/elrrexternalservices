@@ -59,10 +59,10 @@ public class ELRRStageController {
             log.info("LRS response = " + result);
 
         } catch (DateTimeParseException e) {
-            log.error("Invalid last read date" + e.getMessage());
+            log.error("Invalid last read date", e);
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            log.error("Error " + e.getMessage());
+            log.error("Exception", e);
             return ResponseEntity.badRequest().build();
         }
 
