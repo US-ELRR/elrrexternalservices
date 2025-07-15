@@ -31,6 +31,12 @@ public class HeaderFilter implements Filter {
 
             if (!checkHttpHeader) {
                 chain.doFilter(request, response);
+
+            } else if (((HttpServletRequest) request).getRequestURL().toString()
+                    .contains("svc.cluster.local")) {
+
+                chain.doFilter(request, response);
+
             } else {
 
                 if ("https".equalsIgnoreCase(httpServletRequest.getHeader(
