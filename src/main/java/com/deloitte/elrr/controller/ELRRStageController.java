@@ -57,8 +57,6 @@ public class ELRRStageController {
             filters.setSince(lastReadDate);
             filters.setAscending(true);
 
-            log.info("Last read date = ", lastReadDate);
-
             StatementClient client = new StatementClient(lrs);
             result = client.getStatements(filters, 10);
 
