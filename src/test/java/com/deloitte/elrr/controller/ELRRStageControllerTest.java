@@ -18,12 +18,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.deloitte.elrr.HeaderFilter;
+import com.deloitte.elrr.JSONRequestSizeLimitFilter;
 import com.deloitte.elrr.util.TestFileUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,11 +54,18 @@ class ELRRStageControllerTest {
     @Mock
     private HeaderFilter headerFilter;
 
+    private JSONRequestSizeLimitFilter sl = new JSONRequestSizeLimitFilter();
+    private HeaderFilter hf = new HeaderFilter();
+
     @Test
     @WithMockUser
     void testlocalData() throws Exception {
 
         try {
+
+            ReflectionTestUtils.setField(hf, "checkHttpHeader", true);
+            ReflectionTestUtils.setField(sl, "maxSizeLimit", 2000000L);
+            ReflectionTestUtils.setField(sl, "checkMediaTypeJson", false);
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");
 
@@ -73,14 +82,15 @@ class ELRRStageControllerTest {
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
-                    .accept(MediaType.APPLICATION_JSON).contentType(
+                    .content(list.toString()).contentType(
                             MediaType.APPLICATION_JSON);
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
             if (servletResponse.getStatus() == 401) {
                 return;
             }
-            assertEquals(null, servletResponse.getErrorMessage());
+            assertEquals("Malformed request body", servletResponse
+                    .getErrorMessage());
 
         } catch (IOException e) {
             fail("Should not have thrown any exception");
@@ -172,6 +182,7 @@ class ELRRStageControllerTest {
 
     @Test
     void testlocalDataStatusResult() throws Exception {
+
         try {
 
             File testFile = TestFileUtil.getJsonTestFile("competency.json");

@@ -49,7 +49,6 @@ public class ELRRStageController {
 
         try {
 
-            log.info("lastReadDate = " + lastReadDate);
             OffsetDateTime.parse(lastReadDate.toString());
 
             LRS lrs = new LRS(lrsURL, lrsUsername, lrsPassword);
