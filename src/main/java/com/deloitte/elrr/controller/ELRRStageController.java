@@ -38,14 +38,14 @@ public class ELRRStageController {
 
     /**
      * @param lastReadDate
-     * @param lrsLimit
+     * @param maxStatements
      * @return RersponseEntity
      */
     @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
     public ResponseEntity<List<Statement>> localData(
             @RequestParam(value = "lastReadDate") final ZonedDateTime lastReadDate,
-            @RequestParam(value = "lrsLimit") final int lrsLimit) {
+            @RequestParam(value = "maxStatements") final int maxStatements) {
         List<Statement> result = null;
 
         try {
@@ -58,7 +58,7 @@ public class ELRRStageController {
             filters.setAscending(true);
 
             StatementClient client = new StatementClient(lrs);
-            result = client.getStatements(filters, lrsLimit);
+            result = client.getStatements(filters, maxStatements);
 
         } catch (DateTimeParseException e) {
             log.error("Invalid last read date", e);
