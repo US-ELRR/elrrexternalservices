@@ -1,6 +1,7 @@
 package com.deloitte.elrr.controller;
 
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -37,25 +38,27 @@ public class ELRRStageController {
 
     /**
      * @param lastReadDate
+     * @param maxStatements
      * @return RersponseEntity
      */
     @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
     public ResponseEntity<List<Statement>> localData(
-            @RequestParam(value = "lastReadDate", defaultValue = "2021-01-02T00:00:00Z") final String lastReadDate) {
-
+            @RequestParam(value = "lastReadDate") final ZonedDateTime lastReadDate,
+            @RequestParam(value = "maxStatements") final int maxStatements) {
         List<Statement> result = null;
 
         try {
 
-            OffsetDateTime.parse(lastReadDate);
+            OffsetDateTime.parse(lastReadDate.toString());
 
             LRS lrs = new LRS(lrsURL, lrsUsername, lrsPassword);
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
+            filters.setAscending(true);
 
             StatementClient client = new StatementClient(lrs);
-            result = client.getStatements(filters);
+            result = client.getStatements(filters, maxStatements);
 
         } catch (DateTimeParseException e) {
             log.error("Invalid last read date", e);
