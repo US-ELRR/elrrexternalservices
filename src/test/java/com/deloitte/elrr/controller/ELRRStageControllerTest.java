@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -38,7 +39,7 @@ import com.yetanalytics.xapi.util.Mapper;
 /**
  * @author mnelakurti
  */
-@WebMvcTest(ELRRStageController.class)
+@WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @SuppressWarnings("checkstyle:linelength")
 class ELRRStageControllerTest {
 
@@ -81,7 +82,7 @@ class ELRRStageControllerTest {
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z")
+                    .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z&MaxStatements=10")
                     .content(list.toString()).contentType(
                             MediaType.APPLICATION_JSON);
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
@@ -117,11 +118,11 @@ class ELRRStageControllerTest {
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z")
+                    .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
-                    .andDo(print());
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is2xxSuccessful()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -155,15 +156,15 @@ class ELRRStageControllerTest {
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z")
+                    .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(status().isUnauthorized())
-                    .andDo(print());
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 401) {
+            if (servletResponse.getStatus() == 400) {
                 return;
             }
             assertEquals(null, servletResponse.getErrorMessage());
@@ -199,7 +200,7 @@ class ELRRStageControllerTest {
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z")
+                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
             mockMvc.perform(requestBuilder).andExpect(status()
@@ -223,9 +224,9 @@ class ELRRStageControllerTest {
     void testLocalDataInvalidDate() throws Exception {
         try {
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST").accept(
-                            MediaType.APPLICATION_JSON).contentType(
-                                    MediaType.APPLICATION_JSON);
+                    .get("/api/lrsdata?lastReadDate=TEST-TEST-TEST&maxStatements=10")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
+                            MediaType.APPLICATION_JSON);
 
             mockMvc.perform(requestBuilder).andExpect(status()
                     .is4xxClientError()).andDo(print());
