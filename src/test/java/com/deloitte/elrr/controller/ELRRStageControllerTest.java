@@ -2,6 +2,7 @@ package com.deloitte.elrr.controller;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -236,4 +237,15 @@ class ELRRStageControllerTest {
         }
     }
 
+    @Test
+    void testException() {
+
+        try {
+            ELRRStageController elrrStageController = new ELRRStageController();
+            elrrStageController.localData(null, 0);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("lastReadDate is null"));
+        }
+
+    }
 }
