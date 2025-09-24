@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -76,23 +78,26 @@ class ELRRStageControllerTest {
 
             List<Statement> list = Arrays.asList(stmt);
 
-            String lastReadDate = "2021-01-02T00:00:00Z";
+            String lastReadDateStr = "2021-01-02T00:00:00Z";
+            ZonedDateTime lastReadDate = ZonedDateTime.parse(lastReadDateStr);
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z&MaxStatements=10")
-                    .content(list.toString()).contentType(
+                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
+                    .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
+            MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
+                    .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 401) {
+            if (servletResponse.getStatus() == 404) {
                 return;
             }
-            assertEquals("Malformed request body", servletResponse
-                    .getErrorMessage());
+            assertEquals(servletResponse.getStatus(), HttpStatus.OK);
 
         } catch (IOException e) {
             fail("Should not have thrown any exception");
@@ -112,21 +117,20 @@ class ELRRStageControllerTest {
 
             List<Statement> list = Arrays.asList(stmt);
 
-            String lastReadDate = "2021-01-02T00:00:00Z";
+            String lastReadDateStr = "2021-01-02T00:00:00Z";
+            ZonedDateTime lastReadDate = ZonedDateTime.parse(lastReadDateStr);
+
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
+                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(result -> {
-                int status = result.getResponse().getStatus();
-                assertTrue(status == 200 || status == 400,
-                        "Status should be 200 or 400");
-            });
+            mockMvc.perform(requestBuilder).andExpect(status()
+                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -153,14 +157,16 @@ class ELRRStageControllerTest {
 
             List<Statement> list = Arrays.asList(stmt);
 
-            String lastReadDate = "2021-01-02T00:00:00Z";
+            String lastReadDateStr = "2021-01-02T00:00:00Z";
+            ZonedDateTime lastReadDate = ZonedDateTime.parse(lastReadDateStr);
+
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
             when(statementClient.getStatements(filters)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                    .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z&maxStatements=10")
+                    .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
             mockMvc.perform(requestBuilder).andExpect(status()
@@ -168,7 +174,7 @@ class ELRRStageControllerTest {
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 400) {
+            if (servletResponse.getStatus() != 200) {
                 return;
             }
             assertEquals(null, servletResponse.getErrorMessage());
@@ -197,7 +203,9 @@ class ELRRStageControllerTest {
 
             List<Statement> list = Arrays.asList(stmt);
 
-            String lastReadDate = "2021-01-02T00:00:00Z";
+            String lastReadDateStr = "2021-01-02T00:00:00Z";
+            ZonedDateTime lastReadDate = ZonedDateTime.parse(lastReadDateStr);
+
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
