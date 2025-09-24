@@ -15,7 +15,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -40,7 +39,7 @@ import com.yetanalytics.xapi.util.Mapper;
 /**
  * @author mnelakurti
  */
-@WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+@WebMvcTest(ELRRStageController.class)
 @SuppressWarnings("checkstyle:linelength")
 class ELRRStageControllerTest {
 
