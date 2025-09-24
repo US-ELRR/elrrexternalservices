@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yetanalytics.xapi.client.LRS;
 import com.yetanalytics.xapi.client.StatementClient;
 import com.yetanalytics.xapi.client.filters.StatementFilters;
+import com.yetanalytics.xapi.exception.StatementClientException;
 import com.yetanalytics.xapi.model.Statement;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,8 @@ public class ELRRStageController {
      */
     @SuppressWarnings("checkstyle:linelength")
     @GetMapping("/lrsdata")
-    public ResponseEntity<List<Statement>> localData(
-            @RequestParam(value = "lastReadDate") final ZonedDateTime lastReadDate,
+    public ResponseEntity<List<Statement>> localData(@RequestParam(
+            value = "lastReadDate") final ZonedDateTime lastReadDate,
             @RequestParam(value = "maxStatements") final int maxStatements) {
         List<Statement> result = null;
 
@@ -62,6 +63,9 @@ public class ELRRStageController {
 
         } catch (DateTimeParseException e) {
             log.error("Invalid last read date", e);
+            return ResponseEntity.badRequest().build();
+        } catch (StatementClientException e) {
+            log.error("Error getting statements", e);
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Exception", e);
