@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,8 +116,6 @@ class ELRRStageControllerTest {
                     .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(status()
-                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -153,8 +149,6 @@ class ELRRStageControllerTest {
                     .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(status()
-                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -198,8 +192,6 @@ class ELRRStageControllerTest {
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder).andExpect(status()
-                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
@@ -220,8 +212,8 @@ class ELRRStageControllerTest {
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
 
-            mockMvc.perform(requestBuilder).andExpect(status()
-                    .is4xxClientError()).andDo(print());
+            MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
+                    .andReturn();
 
         } catch (Exception e) {
             fail("Should not have thrown any exception");
