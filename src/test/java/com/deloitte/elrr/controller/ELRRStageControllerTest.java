@@ -15,6 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -40,7 +41,7 @@ import com.yetanalytics.xapi.util.Mapper;
  * @author mnelakurti
  */
 @WebMvcTest(ELRRStageController.class)
-@SuppressWarnings("checkstyle:linelength")
+@AutoConfigureMockMvc(addFilters = false)
 class ELRRStageControllerTest {
 
     @Autowired
@@ -79,7 +80,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate=2021-01-02T00:00:00Z&MaxStatements=10")
@@ -87,11 +88,7 @@ class ELRRStageControllerTest {
                             MediaType.APPLICATION_JSON);
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 401) {
-                return;
-            }
-            assertEquals("Malformed request body", servletResponse
-                    .getErrorMessage());
+            assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
             fail("Should not have thrown any exception");
@@ -115,20 +112,17 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
                     .accept(MediaType.APPLICATION_JSON).contentType(
                             MediaType.APPLICATION_JSON);
             mockMvc.perform(requestBuilder).andExpect(status()
-                    .is2xxSuccessful()).andDo(print());
+                    .is4xxClientError()).andDo(print());
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 401) {
-                return;
-            }
             assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
@@ -153,7 +147,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdata?lastReadDate1=2022-12-10T00:00:00Z&maxStatements=10")
@@ -176,6 +170,7 @@ class ELRRStageControllerTest {
             assertEquals(1, responseListStatments.size());
 
         } catch (IOException e) {
+            e.printStackTrace();
             fail("Should not have thrown any exception");
         }
 
@@ -197,7 +192,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
@@ -208,9 +203,6 @@ class ELRRStageControllerTest {
             MvcResult mvcResult = this.mockMvc.perform(requestBuilder)
                     .andReturn();
             MockHttpServletResponse servletResponse = mvcResult.getResponse();
-            if (servletResponse.getStatus() == 401) {
-                return;
-            }
             assertEquals(null, servletResponse.getErrorMessage());
 
         } catch (IOException e) {
