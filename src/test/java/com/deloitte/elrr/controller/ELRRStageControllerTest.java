@@ -83,7 +83,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
@@ -123,7 +123,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
@@ -163,7 +163,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
@@ -209,7 +209,7 @@ class ELRRStageControllerTest {
             StatementFilters filters = new StatementFilters();
             filters.setSince(lastReadDate);
 
-            when(statementClient.getStatements(filters)).thenReturn(list);
+            when(statementClient.getStatements(filters, 10)).thenReturn(list);
 
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                     .get("/api/lrsdatalastReadDate=2022-12-10T00:00:00Z&maxStatements=10")
